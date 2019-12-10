@@ -1,0 +1,7 @@
+.contacts-container{
+  display: flex;
+}
+
+.contacts-list-container{
+  width: 60vw;
+}
