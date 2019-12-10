@@ -16,6 +16,11 @@ class Services {
         const response = await this.apiCaller.get("/contacts")
         return response.data
     }
+
+    async getMe() {
+        const response = await this.apiCaller.get("/me")
+        return response.data.isLoggedIn
+    }
 }
 
 const axiosRequestFunctions = new Services()

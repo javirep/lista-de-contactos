@@ -15,7 +15,7 @@ export default class ContactsList extends Component {
         const contacts = await axiosRequestFunctions.getContacts();
 
         this.setState({
-            "contacts": contacts
+            contacts
         })
     }
 
@@ -75,21 +75,24 @@ export default class ContactsList extends Component {
         return (
             <div className="contacts-list-container">
                 <input type="text" name="searchBar" value={searchBar} onChange={(e) => this.handleChange(e)} />
-                <SideButtons handleChange={(e) => this.handleChange(e)} />
-                {
-                    contacts.length > 0 ?
-                        (
-                            <ul>
-                                {
-                                    filteredContacts.map((contact, index) => {
-                                        return <li key={index}><button onClick={() => this.showContact(contact)}> {contact.name}</button></li>
-                                    })
-                                }
-                            </ul>
-                        )
-                        :
-                        <p>Loading ...</p>
-                }
+                <div style={{ display: "flex" }}>
+
+                    <SideButtons handleChange={(e) => this.handleChange(e)} />
+                    {
+                        contacts.length > 0 ?
+                            (
+                                <ul>
+                                    {
+                                        filteredContacts.map((contact, index) => {
+                                            return <li key={index}><button onClick={() => this.showContact(contact)}> {contact.name}</button></li>
+                                        })
+                                    }
+                                </ul>
+                            )
+                            :
+                            <p>Loading ...</p>
+                    }
+                </div>
             </div>
         )
     }

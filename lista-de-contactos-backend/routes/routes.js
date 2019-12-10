@@ -51,6 +51,16 @@ router.get("/contacts", function (req, res, next) {
   res.status(200).json(contacts)
 })
 
+/* GET me */
+router.get("/me", function (req, res, next) {
+  if (req.session.currentUser) {
+    res.status(200).json({ "isLoggedIn": true })
+  }
+  else {
+    res.status(401).json({ "isLoggedIn": false })
+  }
+})
+
 
 
 module.exports = router;

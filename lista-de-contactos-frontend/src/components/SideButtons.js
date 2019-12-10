@@ -10,10 +10,10 @@ export default class SideButtons extends Component {
         const abcArray = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
         return (
             <div>
-                <button value="" name="sideButton" onClick={(e) => this.liftStateUp(e)}>All</button>
+                <button style={{ display: "block" }} value="" name="sideButton" onClick={(e) => this.liftStateUp(e)}>All</button>
                 {
                     abcArray.map(letter => {
-                        return <button value={letter} name="sideButton" onClick={(e) => this.liftStateUp(e)} >{letter}</button>
+                        return <button style={{ display: "block" }} value={letter} name="sideButton" onClick={(e) => this.liftStateUp(e)} >{letter}</button>
                     })
                 }
             </div>

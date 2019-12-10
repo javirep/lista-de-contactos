@@ -18,7 +18,11 @@ export default class Contacts extends Component {
         return (
             <div className="contacts-container">
                 <ContactsList showContact={(contact) => this.showContact(contact)} />
-                <ContactDetails contact={this.state.contact} />
+                {this.state.contact.id ?
+                    <ContactDetails contact={this.state.contact} />
+                    :
+                    <></>
+                }
             </div>
         )
     }
