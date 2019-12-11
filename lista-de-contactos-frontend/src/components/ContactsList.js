@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axiosRequestFunctions from "../services/Services"
 import SideButtons from "./SideButtons"
+import Pagination from './Pagination'
 
 export default class ContactsList extends Component {
 
@@ -8,7 +9,9 @@ export default class ContactsList extends Component {
         contacts: [],
         searchBar: "",
         sideButton: "",
-        contactId: ""
+        contactId: "",
+        currentPage: 1,
+        contactsPerPage: 50
     }
 
     async componentDidMount() {
@@ -60,16 +63,25 @@ export default class ContactsList extends Component {
         this.props.showContact(contact)
     }
 
-    render() {
-        const { contacts, searchBar } = this.state;
-
-        const filteredContacts = this.sortContacts(this.filterContacts());
-
-        if (contacts.lenght > 0) {
-            filteredContacts = contacts.filter(contact => {
-                return contact.name.includes(searchBar)
+    paginate = currentPage => {
+        if (currentPage > 0) {
+            this.setState({
+                currentPage
             })
         }
+    }
+
+    render() {
+        const { contacts, searchBar, currentPage, contactsPerPage } = this.state;
+
+        let filteredContacts = this.sortContacts(this.filterContacts());
+
+        // Getting current posts:
+        const indexOfLastContact = currentPage * contactsPerPage;
+        const indexOfFirstContact = indexOfLastContact - contactsPerPage;
+        const numberOfPages = Math.ceil(filteredContacts.length / contactsPerPage)
+
+        filteredContacts = filteredContacts.slice(indexOfFirstContact, indexOfLastContact);
 
 
         return (
@@ -79,19 +91,23 @@ export default class ContactsList extends Component {
 
                     <SideButtons handleChange={(e) => this.handleChange(e)} />
                     {
-                        contacts.length > 0 ?
+                        filteredContacts.length > 0 ?
                             (
-                                <ul>
-                                    {
-                                        filteredContacts.map((contact, index) => {
-                                            return <li key={index}><button onClick={() => this.showContact(contact)}> {contact.name}</button></li>
-                                        })
-                                    }
-                                </ul>
+                                <div>
+                                    <ul>
+                                        {
+                                            filteredContacts.map((contact, index) => {
+                                                return <li key={index}><button onClick={() => this.showContact(contact)}> {contact.name}</button></li>
+                                            })
+                                        }
+                                    </ul>
+                                    <Pagination currentPage={currentPage} numberOfPages={numberOfPages} paginate={this.paginate} />
+                                </div>
                             )
                             :
-                            <p>Loading ...</p>
+                            <p>No contacts Matching</p>
                     }
+
                 </div>
             </div>
         )

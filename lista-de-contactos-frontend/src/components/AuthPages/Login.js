@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axiosRequestFunctions from "../../services/Services";
 
 class Login extends Component {
     state = { email: "", password: "", errorMessage: "" };
@@ -16,7 +17,7 @@ class Login extends Component {
         }
 
         if (validForm) {
-            const user = await this.props.login({ email, password });
+            const user = await axiosRequestFunctions.login({ email, password });
             if (!user) {
                 errorMessage = "Un momento por favor..."
             }
@@ -38,7 +39,6 @@ class Login extends Component {
 
         return (
             <form className="form" onSubmit={this.handleFormSubmit}>
-                <h2>Registrate y empieza a compartir</h2>
                 <div>
                     <p>E-mail</p>
                     <input type="text" name="email" value={email} onChange={this.handleChange} />

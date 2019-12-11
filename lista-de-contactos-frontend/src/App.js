@@ -12,8 +12,7 @@ export default class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={Login} />
-        <Route exact path="/contacts" component={Contacts} />
-
+        <PrivateRoute exact path="/contacts" component={Contacts} />
       </Switch>
     )
   }

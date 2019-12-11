@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import axiosRequestFunctions from "../services/Services";
 import ContactCard from './ContactCard';
+import Pagination from "./Pagination"
 
 export default class ContactDetails extends Component {
 
     state = {
         allContacts: [],
-        searchBar: ""
+        searchBar: "",
+        currentPage: 1,
+        contactsPerPage: 20
     }
 
     async componentDidMount() {
@@ -33,6 +36,7 @@ export default class ContactDetails extends Component {
     handleChange(event) {
         const { value, name } = event.target;
         this.setState({
+            currentPage: 1,   // if we dont set currentPage to 1 and the user filters something while being in page 4 may happen that no contacts are displayed
             [name]: value
         })
     }
@@ -43,8 +47,25 @@ export default class ContactDetails extends Component {
         return array.filter(contact => contact.name.includes(searchBar))
     }
 
+    paginate = currentPage => {
+        if (currentPage > 0) {
+            this.setState({
+                currentPage
+            })
+        }
+    }
+
     render() {
-        const myConnections = this.searchBarFilter(this.populateMyConnections());
+
+        const { currentPage, contactsPerPage } = this.state
+
+        let myConnections = this.searchBarFilter(this.populateMyConnections());
+
+        const indexOfLastContact = currentPage * contactsPerPage;
+        const indexOfFirstContact = indexOfLastContact - contactsPerPage;
+        const numberOfPages = Math.ceil(myConnections.length / contactsPerPage)
+
+        myConnections = myConnections.slice(indexOfFirstContact, indexOfLastContact);
 
         return (
             <div className="contact-details-container">
@@ -54,9 +75,14 @@ export default class ContactDetails extends Component {
                     {
                         myConnections ?
                             (
-                                myConnections.map((connection, index) => {
-                                    return <ContactCard connection={connection} />
-                                })
+                                <div>
+                                    {
+                                        myConnections.map((connection, index) => {
+                                            return <ContactCard connection={connection} />
+                                        })
+                                    }
+                                    <Pagination currentPage={currentPage} numberOfPages={numberOfPages} paginate={this.paginate} />
+                                </div>
                             )
                             :
                             <p> This user has no connections. </p>
