@@ -19,7 +19,7 @@ export default function App() {
     <div>
       <Switch>
         <AuthContext.Provider value={{ auth, setAuth, token, setToken }}>
-          <AnonRoute exact path="/" component={Login} />
+          <Route exact path="/" component={Login} />
           <PrivateRoute exact path="/contacts" component={Contacts} />
         </AuthContext.Provider>
       </Switch>

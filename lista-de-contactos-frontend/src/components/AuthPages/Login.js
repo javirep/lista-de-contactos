@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
 import axiosRequestFunctions from "../../services/Services";
 import { AuthContext } from "../../services/authContext";
-import { Link } from "react-router-dom"
 
-export default function Login() {
+export default function Login(props) {
 
     const { setToken, setAuth, } = useContext(AuthContext)
     const [email, setEmail] = useState("");
@@ -26,12 +25,12 @@ export default function Login() {
             const response = await axiosRequestFunctions.login(email, password);
 
             if (response.isLoggedIn) {
-                console.log("token received from Backend: " + response.token)
                 setToken(response.token)
                 setAuth(true);
+                props.history.push("/contacts")
             }
             else {
-                setAuth(true)
+                setAuth(false)
             }
         }
         setErrorMessage(errorMessage)
@@ -67,7 +66,7 @@ export default function Login() {
                     :
                     <></>
             }
-            <Link to="/contacts" className="button" onClick={(e) => handleFormSubmit(e)} > Log in </Link>
+            <button onClick={(e) => handleFormSubmit(e)} > Log in </button>
         </form>
     );
 }

@@ -69,18 +69,19 @@ export default class ContactDetails extends Component {
 
         return (
             <div className="contact-details-container">
-                <input type="text" name="searchBar" value={this.state.searchBar} onChange={(e) => this.handleChange(e)} />
+                <input type="text" placeholder="Search a contact" name="searchBar" value={this.state.searchBar} onChange={(e) => this.handleChange(e)} />
                 <h1>{this.props.contact.name}</h1>
                 <ul>
                     {
                         myConnections ?
                             (
-                                <div>
+                                <div style={{ display: "flex", flexWrap: "wrap" }}>
                                     {
                                         myConnections.map((connection, index) => {
                                             return <ContactCard connection={connection} />
                                         })
                                     }
+                                    <br />
                                     <Pagination currentPage={currentPage} numberOfPages={numberOfPages} paginate={this.paginate} />
                                 </div>
                             )

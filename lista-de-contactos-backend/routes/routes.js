@@ -61,27 +61,12 @@ router.post("/signup", async function (req, res, next) {
 })
 
 /* GET contacts */
-router.post("/contacts", verifiedByToken(), function (req, res, next) {
+router.get("/contacts", verifiedByToken(), function (req, res, next) {
 
   res.status(200).json({
     isLoggedIn: true,
     contacts
   })
 })
-
-/* GET me */
-router.get("/me", function (req, res, next) {
-
-  if (req.session.currentUser) {
-    console.log(true)
-    res.status(200).json({ "isLoggedIn": true })
-  }
-  else {
-    console.log(false)
-    res.status(200).json({ "isLoggedIn": false })
-  }
-})
-
-
 
 module.exports = router;

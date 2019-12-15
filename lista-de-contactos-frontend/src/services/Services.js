@@ -14,13 +14,13 @@ class Services {
     }
 
     async getContacts(token) {
-        const response = await this.apiCaller.post("/contacts", { token })
-        return response.data
-    }
 
-    async getMe() {
-        const response = await this.apiCaller.get("/me")
-        return response.data.isLoggedIn
+        const response = await this.apiCaller.get("/contacts", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return response.data
     }
 }
 

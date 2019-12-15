@@ -6,7 +6,14 @@ export default function Pagination(props) {
 
     return (
         <div>
-            <button onClick={() => paginate(currentPage - 1)}>&lt;</button><span>{currentPage} / {numberOfPages} </span><button onClick={() => paginate(currentPage + 1)}>></button>
+            <button onClick={() => paginate(currentPage - 1)}>&lt;</button>
+            <span>{currentPage} / {numberOfPages} </span>
+            {
+                currentPage < numberOfPages ?
+                    <button onClick={() => paginate(currentPage + 1)}>></button>
+                    :
+                    null
+            }
         </div>
     )
 }

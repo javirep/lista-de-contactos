@@ -91,7 +91,7 @@ export default class ContactsList extends Component {
 
         return (
             <div className="contacts-list-container">
-                <input type="text" name="searchBar" value={searchBar} onChange={(e) => this.handleChange(e)} />
+                <input type="text" placeholder="Search a contact" name="searchBar" value={searchBar} onChange={(e) => this.handleChange(e)} />
                 <div style={{ display: "flex" }}>
 
                     <SideButtons handleChange={(e) => this.handleChange(e)} />
