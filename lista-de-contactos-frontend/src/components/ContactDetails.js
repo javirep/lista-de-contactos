@@ -13,10 +13,10 @@ export default class ContactDetails extends Component {
     }
 
     async componentDidMount() {
-        const allContacts = await axiosRequestFunctions.getContacts();
+        const response = await axiosRequestFunctions.getContacts(this.props.token);
 
         this.setState({
-            allContacts
+            allContacts: response.contacts
         })
     }
 

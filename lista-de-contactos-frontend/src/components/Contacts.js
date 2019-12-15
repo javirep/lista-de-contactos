@@ -1,29 +1,23 @@
-import React, { Component } from 'react'
+import React, { useState, useContext } from 'react'
 import ContactsList from "./ContactsList"
 import ContactDetails from "./ContactDetails"
+import { AuthContext } from "../services/authContext"
 
-export default class Contacts extends Component {
+export default function Contacts() {
 
-    state = {
-        contact: {}
-    }
+    const { token } = useContext(AuthContext);
+    console.log("token in contacts: " + token);
+    var [contact, setContact] = useState("")
 
-    showContact(contact) {
-        this.setState({
-            contact
-        })
-    }
-
-    render() {
-        return (
-            <div className="contacts-container">
-                <ContactsList showContact={(contact) => this.showContact(contact)} />
-                {this.state.contact.id ?
-                    <ContactDetails contact={this.state.contact} />
-                    :
-                    <></>
-                }
-            </div>
-        )
-    }
+    return (
+        <div className="contacts-container">
+            <ContactsList token={token} setContact={setContact} />
+            {contact ?
+                <ContactDetails contact={contact} token={token} />
+                :
+                <></>
+            }
+        </div>
+    )
 }
+

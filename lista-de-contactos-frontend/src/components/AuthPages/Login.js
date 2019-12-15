@@ -1,15 +1,21 @@
-import React, { Component } from "react";
+import React, { useState, useContext } from "react";
 import axiosRequestFunctions from "../../services/Services";
+import { AuthContext } from "../../services/authContext";
+import { Link } from "react-router-dom"
 
-class Login extends Component {
-    state = { email: "", password: "", errorMessage: "" };
+export default function Login() {
 
-    handleFormSubmit = async event => {
+    const { setToken, setAuth, } = useContext(AuthContext)
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    async function handleFormSubmit(event) {
 
         event.preventDefault();
+
         let validForm = true
         let errorMessage = ""
-        const { email, password } = this.state;
 
         if (!email || !password) {
             validForm = false
@@ -17,48 +23,51 @@ class Login extends Component {
         }
 
         if (validForm) {
-            const user = await axiosRequestFunctions.login({ email, password });
-            if (!user) {
-                errorMessage = "Un momento por favor..."
+            const response = await axiosRequestFunctions.login(email, password);
+
+            if (response.isLoggedIn) {
+                console.log("token received from Backend: " + response.token)
+                setToken(response.token)
+                setAuth(true);
+            }
+            else {
+                setAuth(true)
             }
         }
-
-        this.setState({
-            errorMessage
-        })
-
+        setErrorMessage(errorMessage)
     };
 
-    handleChange = event => {
+
+    function handleChange(event) {
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+
+        if (name === "email") {
+            setEmail(value)
+        }
+        if (name === "password") {
+            setPassword(value)
+        }
     };
 
-    render() {
-        const { email, password } = this.state;
+    return (
+        <form className="form" >
+            <div>
+                <p>E-mail</p>
+                <input type="text" name="email" value={email} onChange={(e) => handleChange(e)} />
+            </div>
 
-        return (
-            <form className="form" onSubmit={this.handleFormSubmit}>
-                <div>
-                    <p>E-mail</p>
-                    <input type="text" name="email" value={email} onChange={this.handleChange} />
-                </div>
+            <div>
+                <p>Password</p>
+                <input type="password" name="password" value={password} onChange={(e) => handleChange(e)} />
+            </div>
 
-                <div>
-                    <p>Password</p>
-                    <input type="password" name="password" value={password} onChange={this.handleChange} />
-                </div>
-
-                {
-                    this.state.errorMessage ?
-                        <span>{this.state.errorMessage}</span>
-                        :
-                        <></>
-                }
-                <button className="button" type="submit" value="Login" > Log in </button>
-            </form>
-        );
-    }
+            {
+                errorMessage ?
+                    <span>{errorMessage}</span>
+                    :
+                    <></>
+            }
+            <Link to="/contacts" className="button" onClick={(e) => handleFormSubmit(e)} > Log in </Link>
+        </form>
+    );
 }
-
-export default Login;

@@ -42,7 +42,8 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000
     },
   }),
 );
@@ -73,8 +74,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).render('error');
 });
 
 module.exports = app;

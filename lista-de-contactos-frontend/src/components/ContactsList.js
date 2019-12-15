@@ -15,10 +15,10 @@ export default class ContactsList extends Component {
     }
 
     async componentDidMount() {
-        const contacts = await axiosRequestFunctions.getContacts();
+        const response = await axiosRequestFunctions.getContacts(this.props.token);
 
         this.setState({
-            contacts
+            contacts: response.contacts
         })
     }
 
@@ -60,7 +60,7 @@ export default class ContactsList extends Component {
     }
 
     showContact(contact) {
-        this.props.showContact(contact)
+        this.props.setContact(contact)
     }
 
     paginate = currentPage => {
@@ -72,9 +72,14 @@ export default class ContactsList extends Component {
     }
 
     render() {
-        const { contacts, searchBar, currentPage, contactsPerPage } = this.state;
+        const { searchBar, currentPage, contactsPerPage, contacts } = this.state;
 
-        let filteredContacts = this.sortContacts(this.filterContacts());
+        let filteredContacts = [];
+
+        if (contacts.length > 0) {
+            filteredContacts = this.sortContacts(this.filterContacts());
+        }
+
 
         // Getting current posts:
         const indexOfLastContact = currentPage * contactsPerPage;

@@ -3,7 +3,8 @@ import axios from "axios";
 class Services {
     constructor() {
         this.apiCaller = axios.create({
-            baseURL: `http://localhost:4000`
+            baseURL: `http://localhost:4000`,
+            withCredentials: true
         })
     }
 
@@ -12,8 +13,8 @@ class Services {
         return response.data
     }
 
-    async getContacts() {
-        const response = await this.apiCaller.get("/contacts")
+    async getContacts(token) {
+        const response = await this.apiCaller.post("/contacts", { token })
         return response.data
     }
 
