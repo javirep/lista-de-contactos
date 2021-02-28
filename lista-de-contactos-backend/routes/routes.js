@@ -3,9 +3,10 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 const User = require("../models/User");
-const contacts = require("../contacts");
 const jwt = require("jsonwebtoken");
-const { verifiedByToken } = require("../middlewares/middlewares")
+const { verifiedByToken } = require("../middlewares/middlewares");
+const rawContacts = require("../contacts.json")
+
 
 /*
   POST route for Users Log in
@@ -16,7 +17,7 @@ const { verifiedByToken } = require("../middlewares/middlewares")
 */
 router.post('/login', async function (req, res, next) {
 
-  const { email, password } = req.body;
+  const { email, password, rememberMe } = req.body;
 
   try {
     const user = await User.findOne({ email })
@@ -24,9 +25,16 @@ router.post('/login', async function (req, res, next) {
       res.json({ "errorMessage": "This user doesn´t exist" })
     }
     else if (bcrypt.compareSync(password, user.password)) {
-      req.session.currentUser = user;
+      let expirationDate = Date.now()
 
-      jwt.sign({ user }, "secretKey", (err, token) => {
+      if(!rememberMe){
+        expirationDate += 1000*60*60 // +1h
+      }
+      else{
+        expirationDate += 1000*60*60*48 // 2days
+      }
+
+      jwt.sign({ user, expirationDate }, "secretKey", (err, token) => {
         res.status(200).json({
           token,
           isLoggedIn: true
@@ -35,7 +43,7 @@ router.post('/login', async function (req, res, next) {
     }
 
     else {
-      res.status(401).json({ "errorMessage": "Incorrect password" })
+      res.json({ "errorMessage": "Incorrect password" })
     }
   }
   catch (error) {
@@ -59,9 +67,26 @@ router.post("/signup", async function (req, res, next) {
     res.status(500).json({ "errorMessage": "There is an internal error, please try again in a few minutes." })
   }
 })
+/* GET verifyAuth */
+router.get("/verifyAuth", verifiedByToken(), async function(req, res, next) {
+  res.status(200).json({
+    isLoggedIn: true
+  })
+})
 
 /* GET contacts */
-router.get("/contacts", verifiedByToken(), function (req, res, next) {
+router.get("/contacts", verifiedByToken(), async function (req, res, next) {
+  let contacts = new Array();
+
+  rawContacts.forEach( contact => {
+    if(contacts[contact.id]){
+      console.log("There are different contacts with the same ID")
+    }
+    else{
+      contacts[contact.id] = contact;
+    }
+
+  })
 
   res.status(200).json({
     isLoggedIn: true,

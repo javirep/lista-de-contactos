@@ -1,13 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { AuthContext } from "../services/authContext";
+import { AuthContext } from "../../services/authContext";
 
-// El componente <PrivateRoute /> recibe como argumento un objeto con las propiedades: isLoggedIn y el resto de las props, y además un componente en la key component
+// El componente PrivateRoute deja acceder al componente si Auth es true. Si no redirije a "/" (que es el log in).
 
 function PrivateRoute({ component: Component, isLoggedIn, ...rest }) {
 
     const { auth } = useContext(AuthContext);
-    console.log("auth privRoute: " + auth)
 
     return (
         <Route

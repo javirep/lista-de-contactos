@@ -12,6 +12,7 @@ require('dotenv').config();
 var app = express();
 
 // MONGOOSE CONNECTION
+console.log(process.env.MONGODB_URI);
 mongoose
   .connect(process.env.MONGODB_URI, {
     keepAlive: true,
@@ -32,7 +33,7 @@ app.use(
 
 // App Session Settings
 
-app.use(
+/* app.use(
   session({
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
@@ -46,7 +47,7 @@ app.use(
       maxAge: 24 * 60 * 60 * 1000
     },
   }),
-);
+); */
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

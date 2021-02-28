@@ -1,0 +1,25 @@
+.contact-details-container{
+    width: 100%;
+    margin: 5px 5px 5px 0;
+    border: 1px solid black;
+    border-left: none; 
+}
+
+.contact-details-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.contact-info-container{
+    display: flex;
+    align-items: center;
+    width: 75%
+}
+
+.contact-info-container img{
+    width: 75px;
+    height: 75px;
+    margin: 20px 10px;
+}
